@@ -21,7 +21,7 @@ export class NotificationService {
           title,
           body,
           id: Math.floor(Math.random() * 10000),
-          schedule: { at: new Date(Date.now() + 1000) }, // slight delay
+          schedule: { at: new Date(Date.now() + 1000) },
           sound: " ",
         },
       ],
