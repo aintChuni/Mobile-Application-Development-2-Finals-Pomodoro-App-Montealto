@@ -25,3 +25,31 @@
 #container a {
   text-decoration: none;
 }
+
+.timer-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.timer-display h1 {
+  font-size: 4rem;
+  margin: 16px 0;
+  color: var(--ion-color-dark);
+}
+
+.timer-display h2 {
+  color: var(--ion-color-medium);
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+ion-progress-bar {
+  margin-top: 20px;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.idle-section h2 {
+  margin-bottom: 20px;
+  color: var(--ion-color-medium);
+}

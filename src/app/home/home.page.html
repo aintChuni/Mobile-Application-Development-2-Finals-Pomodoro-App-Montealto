@@ -1,20 +1,33 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Pomodoro Timer</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-card class="timer-card">
+    <ion-card-header>
+      <ion-card-subtitle>Current Time</ion-card-subtitle>
+      <ion-card-title>{{ currentTime }}</ion-card-title>
+    </ion-card-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+    <ion-card-content>
+      <div *ngIf="isRunning" class="timer-display">
+        <h2>{{ isBreak ? 'Break Time' : 'Work Session' }}</h2>
+        <h1>{{ countdownTime }}</h1>
+
+        <ion-progress-bar 
+          [value]="progress"
+          color="{{ isBreak ? 'success' : 'warning' }}">
+        </ion-progress-bar>
+      </div>
+
+      <div *ngIf="!isRunning" class="idle-section">
+        <h2>Ready to Start</h2>
+        <ion-button expand="block" size="large" (click)="startPomodoro()">
+          Start Pomodoro
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
