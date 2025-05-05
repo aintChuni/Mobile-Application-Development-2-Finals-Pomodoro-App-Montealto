@@ -1,16 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
+import { Preferences } from '@capacitor/preferences';
 import { NotificationService } from 'services/notification.service';
 import { VibrationService } from 'services/vibration.service';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule]
+  imports: [CommonModule, IonicModule, RouterModule]
 })
 export class HomePage implements OnInit, OnDestroy {
   currentTime: string = '';
@@ -37,30 +39,39 @@ export class HomePage implements OnInit, OnDestroy {
     this.currentTime = now.toLocaleTimeString();
   }
 
-  startPomodoro() {
+  async startPomodoro() {
     this.isRunning = true;
     this.isBreak = false;
-    this.startTimer(25 * 60);
+
+    const stored = await Preferences.get({ key: 'pomodoroMinutes' });
+    const minutes = stored.value ? +stored.value : 25;
+
+    this.startTimer(minutes * 60);
   }
 
-  startBreak() {
+  async startBreak() {
     this.isBreak = true;
-    this.startTimer(5 * 60);
+
+    const stored = await Preferences.get({ key: 'breakMinutes' });
+    const minutes = stored.value ? +stored.value : 5;
+
+    this.startTimer(minutes * 60);
   }
 
   startTimer(duration: number) {
     this.totalSeconds = duration;
     const initialSeconds = duration;
     this.updateCountdown();
-  
+
     this.timerSubscription = interval(1000).subscribe(() => {
       this.totalSeconds--;
       this.updateCountdown();
       this.progress = 1 - this.totalSeconds / initialSeconds;
-  
+
       if (this.totalSeconds <= 0) {
         this.timerSubscription?.unsubscribe();
         this.vibrationService.vibrate();
+
         if (!this.isBreak) {
           this.notificationService.sendNotification("Pomodoro finished!", "Time for a break.");
           this.startBreak();
@@ -83,6 +94,11 @@ export class HomePage implements OnInit, OnDestroy {
     this.isBreak = false;
     this.countdownTime = '';
     this.progress = 0;
+  }
+
+  resetPomodoro() {
+    this.timerSubscription?.unsubscribe();
+    this.resetState();
   }
 
   ngOnDestroy(): void {

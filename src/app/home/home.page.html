@@ -1,6 +1,11 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Pomodoro Timer</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/settings']">
+        <ion-icon name="settings-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -20,7 +25,14 @@
           [value]="progress"
           color="{{ isBreak ? 'success' : 'warning' }}">
         </ion-progress-bar>
-      </div>
+
+        <ion-button 
+        expand="block" 
+        color="primary" 
+        (click)="resetPomodoro()">
+        Reset Pomodoro
+      </ion-button>
+    </div>
 
       <div *ngIf="!isRunning" class="idle-section">
         <h2>Ready to Start</h2>
